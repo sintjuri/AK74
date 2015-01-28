@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Сборка автомата Калашникова</string>
+    <string name="spirit">Дух</string>
+    <string name="elephant">Слон</string>
+    <string name="scoop">Черпак</string>
+    <string name="grandfather">Дед</string>
+
+
+</resources>
