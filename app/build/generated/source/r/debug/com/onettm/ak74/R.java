@@ -406,7 +406,7 @@ containing a value of this type.
         public static final int powered_by_google_light=0x7f020020;
     }
     public static final class id {
-        public static final int adFragment=0x7f06001b;
+        public static final int adFragment=0x7f06001c;
         public static final int adView=0x7f060017;
         public static final int adjust_height=0x7f060002;
         public static final int adjust_width=0x7f060001;
@@ -415,7 +415,7 @@ containing a value of this type.
         public static final int buy_now=0x7f060011;
         public static final int buy_with_google=0x7f060010;
         public static final int classic=0x7f060014;
-        public static final int container=0x7f060019;
+        public static final int container=0x7f06001a;
         public static final int donate_with_google=0x7f060013;
         public static final int grayscale=0x7f060015;
         public static final int holo_dark=0x7f060007;
@@ -426,13 +426,14 @@ containing a value of this type.
         public static final int monochrome=0x7f060016;
         public static final int none=0x7f060000;
         public static final int normal=0x7f060003;
-        public static final int placeholderFragment=0x7f06001a;
+        public static final int placeholderFragment=0x7f06001b;
         public static final int production=0x7f060009;
         public static final int sandbox=0x7f06000a;
         public static final int satellite=0x7f060004;
         public static final int selectionDetails=0x7f06000d;
         public static final int strict_sandbox=0x7f06000b;
         public static final int terrain=0x7f060005;
+        public static final int timerText=0x7f060019;
         public static final int wrap_content=0x7f06000f;
     }
     public static final class integer {

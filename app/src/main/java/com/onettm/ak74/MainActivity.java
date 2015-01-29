@@ -4,15 +4,25 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class MainActivity extends Activity implements ListDialog.Callbacks{
+
+    private static int level = 0;
+    private static int[] delays = {5, 7, 10, 15};
+
+    private Timer akTimer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,14 +32,21 @@ public class MainActivity extends Activity implements ListDialog.Callbacks{
 
     @Override
     public void onItemSelected(int level) {
+        this.level = level;
+        PlaceholderFragment fragment = (PlaceholderFragment)getFragmentManager().findFragmentById(R.id.placeholderFragment);
+        akTimer = new Timer();
+
+        akTimer.schedule(new AKTimerTask(this, fragment, delays[level]),0, 1000);
 
     }
 
 
     public static class PlaceholderFragment extends Fragment {
 
-        public PlaceholderFragment() {
+        private Handler handler;
+        private TextView timerText;
 
+        public PlaceholderFragment() {
 
         }
 
@@ -41,8 +58,21 @@ public class MainActivity extends Activity implements ListDialog.Callbacks{
             FragmentManager fm = getFragmentManager();
             listDialog.show(fm, "list_dialog");
 
+            handler = new Handler();
+            timerText = (TextView) rootView.findViewById(R.id.timerText);
+
             return rootView;
         }
+
+        public Handler getHandler() {
+            return handler;
+        }
+
+        public TextView getTextView(){
+            return timerText;
+        }
+
+
     }
 
     /**
@@ -112,6 +142,18 @@ public class MainActivity extends Activity implements ListDialog.Callbacks{
                 mAdView.destroy();
             }
             super.onDestroy();
+        }
+
+        public class AKTimerTask extends TimerTask {
+
+
+            public AKTimerTask(){
+            }
+
+            @Override
+            public void run() {
+
+            }
         }
 
     }
