@@ -485,10 +485,11 @@ containing a value of this type.
         public static final int elephant=0x7f080022;
         public static final int grandfather=0x7f080023;
         public static final int scoop=0x7f080024;
-        public static final int spirit=0x7f080025;
-        public static final int store_picture_message=0x7f080026;
-        public static final int store_picture_title=0x7f080027;
-        public static final int wallet_buy_button_place_holder=0x7f080028;
+        public static final int select_level=0x7f080025;
+        public static final int spirit=0x7f080026;
+        public static final int store_picture_message=0x7f080027;
+        public static final int store_picture_title=0x7f080028;
+        public static final int wallet_buy_button_place_holder=0x7f080029;
     }
     public static final class style {
         public static final int Theme_IAPTheme=0x7f090000;

@@ -6,6 +6,7 @@
     <string name="elephant">Слон</string>
     <string name="scoop">Черпак</string>
     <string name="grandfather">Дед</string>
+    <string name="select_level">Выберите уровень сложности</string>
 
 
 </resources>
