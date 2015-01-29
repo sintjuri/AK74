@@ -9,5 +9,10 @@
 
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="select_level">Please select level</string>
+    <string name="ok">Ok</string>
+    <string name="winTitle">Yoa are win</string>
+    <string name="winMessage">Congrats, you are a good soldier</string>
+    <string name="failTitle">You are looser</string>
+    <string name="failMessage">Continue to learn</string>
 
 </resources>
