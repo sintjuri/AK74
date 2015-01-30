@@ -6,12 +6,79 @@
     android:background="#ffffff"
     android:keepScreenOn="false">
 
-    <GridLayout
+
+    <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#ff00ff">
+        android:background="#ff00ff"
+        android:stretchColumns="0,1">
 
-    </GridLayout>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:src="@drawable/first" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/first_part" />
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/first_part" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/first_part" />
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/first_part" />
+        </TableRow>
+
+        <TableRow android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/first_part" />
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/first_part" />
+        </TableRow>
+
+        <TableRow android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/first_part" />
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/first_part" />
+        </TableRow>
+    </TableLayout>
 
     <TextView
         android:id="@+id/timerText"
