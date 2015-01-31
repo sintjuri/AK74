@@ -165,7 +165,7 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
                 mp.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
                 mp.prepare();
             } catch (IOException e1) {
-                e1.printStackTrace();
+                Log.e("", e1.getMessage(), e1);
             }
 
             return rootView;
