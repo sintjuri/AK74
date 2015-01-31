@@ -107,12 +107,12 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
                 PlaceholderFragment newFragment = new PlaceholderFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-// Replace whatever is in the fragment_container view with this fragment,
-// and add the transaction to the back stack
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack
                 transaction.replace(R.id.placeholderFragment, newFragment);
                 transaction.addToBackStack(null);
 
-// Commit the transaction
+                // Commit the transaction
                 transaction.commit();
 
             }
@@ -162,7 +162,7 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
             AssetFileDescriptor afd;
             try {
                 afd = getActivity().getAssets().openFd("reload2.mp3");
-                mp.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
                 mp.prepare();
             } catch (IOException e1) {
                 Log.e("", e1.getMessage(), e1);
@@ -227,24 +227,23 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
                   drag shadow released over the target view
             the action only sent here if ACTION_DRAG_STARTED returned true
             return true if successfully handled the drop else false*/
-                    if(draggedImageView.getTag()!=null){
-                        String tag = (String)draggedImageView.getTag();
+                    if (draggedImageView.getTag() != null) {
+                        String tag = (String) draggedImageView.getTag();
                         PartEnum part = PartEnum.getPartByTag(tag);
-                        if(part!=null){
-                            if(part.getOrder()==currentNumber){
+                        if (part != null) {
+                            if (part.getOrder() == currentNumber) {
                                 Log.i(TAG, "part = " + part.getTag() + " currentNumber = " + currentNumber);
                                 currentNumber++;
                                 mp.start();
-                                ((ImageView)rootView.findViewById(R.id.ak)).setImageResource(part.getAkWithThisPartResource());
+                                ((ImageView) rootView.findViewById(R.id.ak)).setImageResource(part.getAkWithThisPartResource());
                                 Log.i(TAG, "dropping " + draggedImageView.getTag());
                                 draggedImageView.setVisibility(View.INVISIBLE);
                                 return true;
                             }
-                        }else{
+                        } else {
                             return false;
                         }
-                    }
-                    else{
+                    } else {
                         return false;
                     }
 
@@ -355,8 +354,9 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
             // get test ads on a physical device. e.g.
             // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
             AdRequest adRequest = new AdRequest.Builder()
-            .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    //.addTestDevice("74760DA0E4A7D8383E8EC5268A2486CF")
+                    //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                            .addTestDevice("173BD073D90BF3D4470C5BF99574C283")
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                     .build();
 
             // Start loading the ad in the background.
