@@ -4,35 +4,52 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.io.IOException;
+import java.util.Stack;
 import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class MainActivity extends Activity implements ListDialog.Callbacks {
 
-    private static int level = 0;
+    private int level = 0;
+    public static int MAX_NUMBER = 6;
     private static int[] delays = {5, 7, 10, 25};
-    private int maxTick;
+    private int lastTick;
     private Timer akTimer;
 
-    public int getMaxTick() {
-        return maxTick;
+    public Integer getCurrentNumber() {
+        PlaceholderFragment fragment = (PlaceholderFragment) getFragmentManager().findFragmentById(R.id.placeholderFragment);
+        return fragment.getCurrentNumber();
     }
 
-    public void setMaxTick(int maxTick) {
-        this.maxTick = maxTick;
+    public int getLastTick() {
+        return lastTick;
+    }
+
+    public void setLastTick(int lastTick) {
+        this.lastTick = lastTick;
     }
 
     @Override
@@ -44,14 +61,16 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
     @Override
     public void onItemSelected(int level) {
         this.level = level;
+        PlaceholderFragment fragment = (PlaceholderFragment) getFragmentManager().findFragmentById(R.id.placeholderFragment);
+        fragment.mix();
         startTimer();
     }
 
     private void startTimer() {
         PlaceholderFragment fragment = (PlaceholderFragment) getFragmentManager().findFragmentById(R.id.placeholderFragment);
         akTimer = new Timer();
-        if (maxTick <= 0) {
-            maxTick = delays[level];
+        if (lastTick <= 0) {
+            lastTick = delays[level];
         }
         akTimer.schedule(new AKTimerTask(this, fragment), 0, 1000);
     }
@@ -59,7 +78,7 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
     @Override
     protected void onPause() {
         super.onPause();
-        if(akTimer!=null) {
+        if (akTimer != null) {
             akTimer.cancel();
         }
     }
@@ -67,9 +86,11 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
     @Override
     protected void onResume() {
         super.onResume();
-        if ((akTimer!=null) && (maxTick>0)){
+        if ((akTimer != null) && (lastTick > 0)) {
             startTimer();
         }
+
+
     }
 
     private void showAlert(String title, String message, int drawable) {
@@ -81,7 +102,19 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
         // On pressing Settings button
         alertDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                openDialog();
+
+                // Create new fragment and transaction
+                PlaceholderFragment newFragment = new PlaceholderFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack
+                transaction.replace(R.id.placeholderFragment, newFragment);
+                transaction.addToBackStack(null);
+
+// Commit the transaction
+                transaction.commit();
+
             }
         });
 
@@ -95,18 +128,23 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
         listDialog.show(fm, "list_dialog");
     }
 
-    public void showWin(){
+    public void showWin() {
         showAlert(getString(R.string.winTitle), getString(R.string.winMessage), R.drawable.win);
     }
 
-    public void showFail(){
+    public void showFail() {
         showAlert(getString(R.string.failTitle), getString(R.string.failMessage), R.drawable.fail);
     }
 
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment implements View.OnDragListener {
 
+        private String TAG = "DRAG";
+
+        private View rootView;
         private Handler handler;
         private TextView timerText;
+        private Integer currentNumber;
+        final MediaPlayer mp = new MediaPlayer();
 
         public PlaceholderFragment() {
 
@@ -114,12 +152,21 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_my, container, false);
-
-            ((MainActivity)getActivity()).openDialog();
+            rootView = inflater.inflate(R.layout.fragment_my, container, false);
+            ((MainActivity) getActivity()).openDialog();
 
             handler = new Handler();
             timerText = (TextView) rootView.findViewById(R.id.timerText);
+
+            rootView.findViewById(R.id.ak).setOnDragListener(this);
+            AssetFileDescriptor afd;
+            try {
+                afd = getActivity().getAssets().openFd("reload2.mp3");
+                mp.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+                mp.prepare();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
 
             return rootView;
         }
@@ -132,7 +179,158 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
             return timerText;
         }
 
+        @Override
+        public boolean onDrag(View receivingLayoutView, DragEvent dragEvent) {
+            View draggedImageView = (View) dragEvent.getLocalState();
 
+            // Handles each of the expected events
+            switch (dragEvent.getAction()) {
+
+                case DragEvent.ACTION_DRAG_STARTED:
+                    Log.i(TAG, "drag action started");
+
+                    // Determines if this View can accept the dragged data
+                    if (dragEvent.getClipDescription()
+                            .hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                        Log.i(TAG, "Can accept this data");
+
+                        // returns true to indicate that the View can accept the dragged data.
+                        return true;
+
+                    } else {
+                        Log.i(TAG, "Can not accept this data");
+
+                    }
+
+                    // Returns false. During the current drag and drop operation, this View will
+                    // not receive events again until ACTION_DRAG_ENDED is sent.
+                    return false;
+
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    Log.i(TAG, "drag action entered");
+//                the drag point has entered the bounding box
+                    return true;
+
+                case DragEvent.ACTION_DRAG_LOCATION:
+                    Log.i(TAG, "drag action location");
+                /*triggered after ACTION_DRAG_ENTERED
+                stops after ACTION_DRAG_EXITED*/
+                    return true;
+
+                case DragEvent.ACTION_DRAG_EXITED:
+                    Log.i(TAG, "drag action exited");
+//                the drag shadow has left the bounding box
+                    return true;
+
+                case DragEvent.ACTION_DROP:
+                  /* the listener receives this action type when
+                  drag shadow released over the target view
+            the action only sent here if ACTION_DRAG_STARTED returned true
+            return true if successfully handled the drop else false*/
+                    if(draggedImageView.getTag()!=null){
+                        String tag = (String)draggedImageView.getTag();
+                        PartEnum part = PartEnum.getPartByTag(tag);
+                        if(part!=null){
+                            if(part.getOrder()==currentNumber){
+                                Log.i(TAG, "part = " + part.getTag() + " currentNumber = " + currentNumber);
+                                currentNumber++;
+                                mp.start();
+                                ((ImageView)rootView.findViewById(R.id.ak)).setImageResource(part.getAkWithThisPartResource());
+                                Log.i(TAG, "dropping " + draggedImageView.getTag());
+                                draggedImageView.setVisibility(View.INVISIBLE);
+                                return true;
+                            }
+                        }else{
+                            return false;
+                        }
+                    }
+                    else{
+                        return false;
+                    }
+
+                case DragEvent.ACTION_DRAG_ENDED:
+
+                    Log.i(TAG, "drag action ended");
+                    Log.i(TAG, "getResult: " + dragEvent.getResult());
+
+
+//                if the drop was not successful, set the ball to visible
+                    if (!dragEvent.getResult()) {
+                        Log.i(TAG, "setting visible");
+                        draggedImageView.setVisibility(View.VISIBLE);
+                    }
+
+                    return true;
+                // An unknown action type was received.
+                default:
+                    Log.i(TAG, "Unknown action type received by OnDragListener.");
+                    break;
+            }
+            return false;
+        }
+
+        public void mix() {
+
+            TableLayout table = (TableLayout) rootView.findViewById(R.id.table);
+            Stack<PartEnum> parts = createRandomList();
+
+            for (int i = 0; i < table.getChildCount(); i++) {
+                final TableRow tableRow = (TableRow) table.getChildAt(i);
+                if (tableRow.getId() != R.id.akRow) {
+                    for (int j = 0; j < tableRow.getChildCount(); j++) {
+                        final View child = tableRow.getChildAt(j);
+                        if (child instanceof ImageView) {
+                            PartEnum part = parts.pop();
+                            child.setTag(part.getTag());
+                            ((ImageView) child).setImageResource(part.getResource());
+                            child.setOnTouchListener(new View.OnTouchListener() {
+                                @Override
+                                public boolean onTouch(View v, MotionEvent motionEvent) {
+                                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                                        ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
+
+                                        String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
+                                        ClipData dragData = new ClipData("",
+                                                mimeTypes, item);
+
+                                        // Instantiates the drag shadow builder.
+                                        View.DragShadowBuilder myShadow = new View.DragShadowBuilder(child);
+
+                                        // Starts the drag
+                                        v.startDrag(dragData,  // the data to be dragged
+                                                myShadow,  // the drag shadow builder
+                                                child,
+                                                0          // flags (not currently used, set to 0)
+                                        );
+
+                                        v.setVisibility(View.INVISIBLE);
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                }
+
+                            });
+                        }
+                    }
+                }
+                currentNumber = 0;
+
+            }
+        }
+
+        private Stack<PartEnum> createRandomList() {
+            //TODO add real implementation
+            Stack<PartEnum> result = new Stack<PartEnum>();
+            for (PartEnum value : PartEnum.values()) {
+                result.push(value);
+            }
+            return result;
+        }
+
+        public Integer getCurrentNumber() {
+            return currentNumber;
+        }
     }
 
     /**
@@ -157,8 +355,8 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
             // get test ads on a physical device. e.g.
             // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
             AdRequest adRequest = new AdRequest.Builder()
-//                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice("74760DA0E4A7D8383E8EC5268A2486CF")
+            .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    //.addTestDevice("74760DA0E4A7D8383E8EC5268A2486CF")
                     .build();
 
             // Start loading the ad in the background.
@@ -202,18 +400,6 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
                 mAdView.destroy();
             }
             super.onDestroy();
-        }
-
-        public class AKTimerTask extends TimerTask {
-
-
-            public AKTimerTask() {
-            }
-
-            @Override
-            public void run() {
-
-            }
         }
 
     }

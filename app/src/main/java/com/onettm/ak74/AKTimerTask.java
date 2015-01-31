@@ -1,7 +1,5 @@
 package com.onettm.ak74;
 
-import android.widget.Toast;
-
 import java.util.TimerTask;
 
 public class AKTimerTask extends TimerTask {
@@ -23,12 +21,18 @@ public class AKTimerTask extends TimerTask {
         fragment.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                int currentTick = context.getMaxTick()-1;
-                context.setMaxTick(currentTick);
+                int currentTick = context.getLastTick()-1;
+                context.setLastTick(currentTick);
                 fragment.getTextView().setText(currentTick + "");
-                if(currentTick <= 0) {
+                if (context.getCurrentNumber()==MainActivity.MAX_NUMBER){
+                    context.setLastTick(0);
                     cancel();
-                    context.showFail();
+                    context.showWin();
+                }else{
+                    if(currentTick <= 0) {
+                        cancel();
+                        context.showFail();
+                    }
                 }
             }
         });
