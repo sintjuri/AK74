@@ -27,6 +27,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Stack;
 import java.util.Timer;
 
@@ -331,6 +332,7 @@ public class MainActivity extends Activity implements Callbacks {
             for (PartEnum value : PartEnum.values()) {
                 result.push(value);
             }
+            Collections.shuffle(result);
             return result;
         }
 
