@@ -35,7 +35,7 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
 
     private int level = 0;
     public static int MAX_NUMBER = 6;
-    private static int[] delays = {5, 7, 10, 25};
+    private static int[] delays = {5, 7, 10, 25, 600};
     private int lastTick;
     private Timer akTimer;
 

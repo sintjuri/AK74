@@ -10,7 +10,8 @@
         android:id="@+id/placeholderFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/adFragment" />
+        android:layout_above="@+id/adFragment"
+        tools:layout="@layout/fragment_my" />
     <fragment
         android:id="@+id/adFragment"
         android:name="com.onettm.ak74.MainActivity$AdFragment"
