@@ -105,14 +105,19 @@ public class MainActivity extends Activity implements Callbacks {
         alertDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
+                Fragment fragment = getFragmentManager().findFragmentById(R.id.placeholderFragment);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                if(fragment != null)
+                    transaction.remove(fragment);
+
                 // Create new fragment and transaction
                 PlaceholderFragment newFragment = new PlaceholderFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack
-                transaction.replace(R.id.placeholderFragment, newFragment);
-                transaction.addToBackStack(null);
+                //transaction.replace(R.id.placeholderFragment, newFragment);
+                transaction.add(R.id.placeholderFragment, newFragment);
 
                 // Commit the transaction
                 transaction.commit();
