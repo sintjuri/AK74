@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:rowCount="3"
     android:columnCount="4"
     android:columnOrderPreserved="true"
@@ -9,7 +11,8 @@
     android:showDividers="beginning|middle|end"
     android:visibility="visible"
     android:stretchColumns="*"
-    android:shrinkColumns="*">
+    android:shrinkColumns="*"
+    tools:context="com.onettm.ak74.LevelChoiceDialog">
 
     <TableRow
         android:layout_width="match_parent"
@@ -76,7 +79,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/imageView4"
+            android:id="@+id/imageViewSelectLevel4"
             android:src="@drawable/level4"
             android:scaleType="fitCenter"
             android:contentDescription="@string/select_level_4"

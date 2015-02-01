@@ -30,8 +30,10 @@ import java.io.IOException;
 import java.util.Stack;
 import java.util.Timer;
 
+import static com.onettm.ak74.LevelChoiceDialog.*;
 
-public class MainActivity extends Activity implements ListDialog.Callbacks {
+
+public class MainActivity extends Activity implements Callbacks {
 
     private int level = 0;
     public static int MAX_NUMBER = 6;
@@ -123,9 +125,9 @@ public class MainActivity extends Activity implements ListDialog.Callbacks {
     }
 
     protected void openDialog() {
-        ListDialog listDialog = new ListDialog();
+        LevelChoiceDialog lvlDialog = new LevelChoiceDialog();
         FragmentManager fm = getFragmentManager();
-        listDialog.show(fm, "list_dialog");
+        lvlDialog.show(fm, "selectLevelLayout");
     }
 
     public void showWin() {

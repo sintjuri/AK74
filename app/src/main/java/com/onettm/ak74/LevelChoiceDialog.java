@@ -6,14 +6,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ImageView;
 
 
-public class ListDialog extends DialogFragment {
+public class LevelChoiceDialog extends DialogFragment {
     View view;
-    ListView listView;
+    ImageView imageViewLevel1;
+    ImageView imageViewLevel2;
+    ImageView imageViewLevel3;
+    ImageView imageViewLevel4;
+    ImageView imageViewLevel5;
     /**
      * The fragment's current callback object, which is notified of list item
      * clicks.
@@ -37,7 +39,7 @@ public class ListDialog extends DialogFragment {
     }
 
     /**
-     * A dummy implementation of the {@link com.onettm.ak74.ListDialog.Callbacks} interface that does
+     * A dummy implementation of the {@link com.onettm.ak74.LevelChoiceDialog.Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
@@ -56,20 +58,38 @@ public class ListDialog extends DialogFragment {
     public void onStart() {
         super.onStart();
 
-        listView.setVisibility(View.VISIBLE);
-
-        final String[] res = { getActivity().getString(R.string.spirit),getActivity().getString(R.string.elephant), getActivity().getString(R.string.scoop), getActivity().getString(R.string.grandfather) };
-
-        listView.setAdapter(new ArrayAdapter<String>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1, res
-        ));
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        imageViewLevel1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mCallbacks.onItemSelected(position);
+            public void onClick(View v) {
+                mCallbacks.onItemSelected(0);
+                dismiss();
+            }
+        });
+        imageViewLevel2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallbacks.onItemSelected(1);
+                dismiss();
+            }
+        });
+        imageViewLevel3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallbacks.onItemSelected(2);
+                dismiss();
+            }
+        });
+        imageViewLevel4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallbacks.onItemSelected(3);
+                dismiss();
+            }
+        });
+        imageViewLevel5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallbacks.onItemSelected(4);
                 dismiss();
             }
         });
@@ -79,8 +99,12 @@ public class ListDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_list_dialog, container, false);
-        listView = (ListView) view.findViewById(R.id.item_list);
+        view = inflater.inflate(R.layout.level_choose_layout, container, false);
+        imageViewLevel1 = (ImageView) view.findViewById(R.id.imageViewSelectLevel1);
+        imageViewLevel2 = (ImageView) view.findViewById(R.id.imageViewSelectLevel2);
+        imageViewLevel3 = (ImageView) view.findViewById(R.id.imageViewSelectLevel3);
+        imageViewLevel4 = (ImageView) view.findViewById(R.id.imageViewSelectLevel4);
+        imageViewLevel5 = (ImageView) view.findViewById(R.id.imageViewSelectLevel5);
 
         return view;
     }
