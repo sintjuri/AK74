@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:rowCount="3"
+    android:columnCount="4"
+    android:columnOrderPreserved="true"
+    android:id="@+id/selectLevelLayout"
+    android:measureWithLargestChild="false"
+    android:showDividers="beginning|middle|end"
+    android:visibility="visible"
+    android:stretchColumns="*"
+    android:shrinkColumns="*">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="30">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageViewSelectLevel1"
+            android:src="@drawable/level1"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/select_level_1"
+            android:adjustViewBounds="false"
+            android:baselineAlignBottom="false" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageViewSelectLevel2"
+            android:src="@drawable/level2"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/select_level_2"
+            android:adjustViewBounds="false" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="34">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageViewSelectLevel5"
+            android:src="@drawable/level5"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/select_level_5"
+            android:adjustViewBounds="false"
+            android:baselineAlignBottom="false"
+            android:layout_span="2"
+            android:cropToPadding="false"
+            android:layout_column="0" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="30">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageViewSelectLevel3"
+            android:src="@drawable/level3"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/select_level_3"
+            android:adjustViewBounds="false"
+            android:baselineAlignBottom="false"
+            android:cropToPadding="true" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView4"
+            android:src="@drawable/level4"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/select_level_4"
+            android:adjustViewBounds="false"
+            android:baselineAlignBottom="false"
+            android:focusableInTouchMode="false"
+            android:clickable="false" />
+    </TableRow>
+
+</TableLayout>
