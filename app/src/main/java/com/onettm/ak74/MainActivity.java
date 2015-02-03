@@ -31,10 +31,7 @@ import java.util.Collections;
 import java.util.Stack;
 import java.util.Timer;
 
-import static com.onettm.ak74.LevelChoiceDialog.*;
-
-
-public class MainActivity extends Activity implements Callbacks {
+public class MainActivity extends Activity implements LevelChoiceDialog.Callbacks {
 
     private int level = 0;
     public static int MAX_NUMBER = 6;
@@ -108,7 +105,7 @@ public class MainActivity extends Activity implements Callbacks {
 
                 Fragment fragment = getFragmentManager().findFragmentById(R.id.placeholderFragment);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                if(fragment != null)
+                if (fragment != null)
                     transaction.remove(fragment);
 
                 // Create new fragment and transaction
@@ -133,6 +130,8 @@ public class MainActivity extends Activity implements Callbacks {
     protected void openDialog() {
         LevelChoiceDialog lvlDialog = new LevelChoiceDialog();
         FragmentManager fm = getFragmentManager();
+        final Fragment selectLevelLayout = getFragmentManager().findFragmentByTag("selectLevelLayout");
+
         lvlDialog.show(fm, "selectLevelLayout");
     }
 
@@ -248,12 +247,9 @@ public class MainActivity extends Activity implements Callbacks {
                                 draggedImageView.setVisibility(View.INVISIBLE);
                                 return true;
                             }
-                        } else {
-                            return false;
                         }
-                    } else {
-                        return false;
                     }
+                    return false;
 
                 case DragEvent.ACTION_DRAG_ENDED:
 
@@ -265,9 +261,10 @@ public class MainActivity extends Activity implements Callbacks {
                     if (!dragEvent.getResult()) {
                         Log.i(TAG, "setting visible");
                         draggedImageView.setVisibility(View.VISIBLE);
+                        return true;
                     }
 
-                    return true;
+                    return false;
                 // An unknown action type was received.
                 default:
                     Log.i(TAG, "Unknown action type received by OnDragListener.");
@@ -293,27 +290,39 @@ public class MainActivity extends Activity implements Callbacks {
                             child.setOnTouchListener(new View.OnTouchListener() {
                                 @Override
                                 public boolean onTouch(View v, MotionEvent motionEvent) {
-                                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                                        ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
+                                    switch (motionEvent.getActionMasked()) {
+                                        case (MotionEvent.ACTION_DOWN):
+                                            return true;
+                                        case (MotionEvent.ACTION_UP):
+                                            v.setVisibility(View.VISIBLE);
+                                            return false;
+                                        case (MotionEvent.ACTION_MOVE):
+                                            Log.d(TAG, "onTouch");
+                                            try{
+                                                ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
 
-                                        String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
-                                        ClipData dragData = new ClipData("",
-                                                mimeTypes, item);
+                                                String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
+                                                ClipData dragData = new ClipData("",
+                                                        mimeTypes, item);
 
-                                        // Instantiates the drag shadow builder.
-                                        View.DragShadowBuilder myShadow = new View.DragShadowBuilder(child);
+                                                // Instantiates the drag shadow builder.
+                                                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(child);
 
-                                        // Starts the drag
-                                        v.startDrag(dragData,  // the data to be dragged
-                                                myShadow,  // the drag shadow builder
-                                                child,
-                                                0          // flags (not currently used, set to 0)
-                                        );
+                                                // Starts the drag
+                                                v.startDrag(dragData,  // the data to be dragged
+                                                        myShadow,  // the drag shadow builder
+                                                        child,
+                                                        0          // flags (not currently used, set to 0)
+                                                );
 
-                                        v.setVisibility(View.INVISIBLE);
-                                        return true;
-                                    } else {
-                                        return false;
+                                                v.setVisibility(View.INVISIBLE);
+                                                return true;
+                                            }
+                                            catch(Throwable t){
+                                                return false;
+                                            }
+                                        default:
+                                            return false;
                                     }
                                 }
 
@@ -364,7 +373,7 @@ public class MainActivity extends Activity implements Callbacks {
             // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
             AdRequest adRequest = new AdRequest.Builder()
                     //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                            .addTestDevice("173BD073D90BF3D4470C5BF99574C283")
+                    .addTestDevice("173BD073D90BF3D4470C5BF99574C283")
                     .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                     .build();
 

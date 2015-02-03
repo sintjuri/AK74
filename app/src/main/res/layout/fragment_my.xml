@@ -10,53 +10,94 @@
 
     <TableLayout
         android:id="@+id/table"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="#ff00ff"
-        android:stretchColumns="0,1">
+        android:stretchColumns="*"
+        android:shrinkColumns="*">
 
         <TableRow
             android:id="@+id/akRow"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="40">
 
             <ImageView
                 android:id="@+id/ak"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ak74base"
+                android:scaleType="fitCenter"
                 android:layout_span="2"
-                android:src="@drawable/ak74base" />
+                android:layout_weight="40" />
 
         </TableRow>
 
         <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="20">
 
-            <ImageView android:layout_gravity="center" />
+            <ImageView android:layout_gravity="center_horizontal|bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="50"
+                android:src="@drawable/part2_1"
+                android:scaleType="fitEnd"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"/>
 
-            <ImageView android:layout_gravity="center" />
+            <ImageView android:layout_gravity="center_horizontal|bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="50"
+                android:src="@drawable/part1_1"
+                android:scaleType="fitEnd" />
         </TableRow>
 
         <TableRow
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="20"
+            android:gravity="bottom">
 
-            <ImageView android:layout_gravity="center" />
+            <ImageView android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:src="@drawable/part3_1"
+                android:adjustViewBounds="false"
+                android:scaleType="fitEnd"
+                android:layout_column="0" />
 
-            <ImageView android:layout_gravity="center" />
+            <ImageView android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:src="@drawable/part4_1"
+                android:scaleType="fitEnd"
+                android:layout_column="1" />
         </TableRow>
 
         <TableRow
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="20">
 
-            <ImageView android:layout_gravity="center" />
+            <ImageView android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/part5_1"
+                android:scaleType="fitEnd" />
 
-            <ImageView android:layout_gravity="center" />
+            <ImageView android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/part6_1"
+                android:scaleType="fitEnd" />
         </TableRow>
 
         <!--<TableRow

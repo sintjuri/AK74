@@ -2,12 +2,12 @@ package com.onettm.ak74;
 
 public enum PartEnum {
 
-    First(R.drawable.part1, "first_part", R.drawable.ak74base_1, 0),
-    Second(R.drawable.part2, "second_part", R.drawable.ak74base_2, 1),
-    Third(R.drawable.part3, "third_part", R.drawable.ak74base_3, 2),
-    Fourth(R.drawable.part4, "fourth_part", R.drawable.ak74base_4, 3),
-    Fifth(R.drawable.part5, "fifth_part", R.drawable.ak74base_5, 4),
-    Sixth(R.drawable.part6, "sixth_part", R.drawable.ak74base_6_full, 5);
+    First(R.drawable.part1_1, "first_part", R.drawable.ak74base_1, 0),
+    Second(R.drawable.part2_1, "second_part", R.drawable.ak74base_2, 1),
+    Third(R.drawable.part3_1, "third_part", R.drawable.ak74base_3, 2),
+    Fourth(R.drawable.part4_1, "fourth_part", R.drawable.ak74base_4, 3),
+    Fifth(R.drawable.part5_1, "fifth_part", R.drawable.ak74base_5, 4),
+    Sixth(R.drawable.part6_1, "sixth_part", R.drawable.ak74base_6_full, 5);
 
     private final int resource;
     private final int akWithThisPartResource;
