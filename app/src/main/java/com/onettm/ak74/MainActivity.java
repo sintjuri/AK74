@@ -123,6 +123,15 @@ public class MainActivity extends Activity implements LevelChoiceDialog.Callback
             }
         });
 
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                dialog.dismiss();
+                openDialog();
+            }
+        });
+
         // Showing Alert Message
         alertDialog.show();
     }
@@ -298,7 +307,7 @@ public class MainActivity extends Activity implements LevelChoiceDialog.Callback
                                             return false;
                                         case (MotionEvent.ACTION_MOVE):
                                             Log.d(TAG, "onTouch");
-                                            try{
+                                            try {
                                                 ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
 
                                                 String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
@@ -317,8 +326,7 @@ public class MainActivity extends Activity implements LevelChoiceDialog.Callback
 
                                                 v.setVisibility(View.INVISIBLE);
                                                 return true;
-                                            }
-                                            catch(Throwable t){
+                                            } catch (Throwable t) {
                                                 return false;
                                             }
                                         default:

@@ -15,7 +15,6 @@ public class LevelChoiceDialog extends DialogFragment {
     ImageView imageViewLevel2;
     ImageView imageViewLevel3;
     ImageView imageViewLevel4;
-    ImageView imageViewLevel5;
     /**
      * The fragment's current callback object, which is notified of list item
      * clicks.
@@ -86,13 +85,6 @@ public class LevelChoiceDialog extends DialogFragment {
                 dismiss();
             }
         });
-        imageViewLevel5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallbacks.onItemSelected(4);
-                dismiss();
-            }
-        });
     }
 
     @Override
@@ -104,7 +96,6 @@ public class LevelChoiceDialog extends DialogFragment {
         imageViewLevel2 = (ImageView) view.findViewById(R.id.imageViewSelectLevel2);
         imageViewLevel3 = (ImageView) view.findViewById(R.id.imageViewSelectLevel3);
         imageViewLevel4 = (ImageView) view.findViewById(R.id.imageViewSelectLevel4);
-        imageViewLevel5 = (ImageView) view.findViewById(R.id.imageViewSelectLevel5);
 
         return view;
     }
