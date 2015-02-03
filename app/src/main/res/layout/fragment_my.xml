@@ -4,7 +4,6 @@
     android:id="@+id/mainLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#ffffff"
     android:keepScreenOn="false">
 
 
@@ -12,9 +11,10 @@
         android:id="@+id/table"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ff00ff"
         android:stretchColumns="*"
-        android:shrinkColumns="*">
+        android:shrinkColumns="*"
+        android:background="@drawable/backrepeat"
+        >
 
         <TableRow
             android:id="@+id/akRow"
