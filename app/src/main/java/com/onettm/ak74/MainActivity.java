@@ -40,8 +40,7 @@ public class MainActivity extends FragmentActivity {
     }
 
 
-
-    public void toGame(int level){
+    public void toGame(int level) {
         // Create a new Fragment to be placed in the activity layout
         GameFragment gameFragment = new GameFragment();
         gameFragment.setLevel(level);
@@ -51,7 +50,7 @@ public class MainActivity extends FragmentActivity {
         transaction.commit();
     }
 
-    public void toLevelChoise(){
+    public void toLevelChoise() {
         // Create a new Fragment to be placed in the activity layout
         LevelChoiceFragment levelChoiceFragment = new LevelChoiceFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -63,10 +62,7 @@ public class MainActivity extends FragmentActivity {
 
     public static class LevelChoiceFragment extends Fragment {
         View view;
-        ImageView imageViewLevel1;
-        ImageView imageViewLevel2;
-        ImageView imageViewLevel3;
-        ImageView imageViewLevel4;
+        MainActivity activity;
 
 
         @Override
@@ -79,33 +75,36 @@ public class MainActivity extends FragmentActivity {
                                  Bundle savedInstanceState) {
             // Inflate the layout for this fragment
             view = inflater.inflate(R.layout.level_choose_layout, container, false);
-            imageViewLevel1 = (ImageView) view.findViewById(R.id.imageViewSelectLevel1);
-            imageViewLevel2 = (ImageView) view.findViewById(R.id.imageViewSelectLevel2);
-            imageViewLevel3 = (ImageView) view.findViewById(R.id.imageViewSelectLevel3);
-            imageViewLevel4 = (ImageView) view.findViewById(R.id.imageViewSelectLevel4);
-
-            imageViewLevel1.setOnClickListener(new View.OnClickListener() {
+            view.findViewById(R.id.imageViewSelectLevel1).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity)getActivity()).toGame(0);
+                    if (activity != null) {
+                        activity.toGame(0);
+                    }
                 }
             });
-            imageViewLevel2.setOnClickListener(new View.OnClickListener() {
+            view.findViewById(R.id.imageViewSelectLevel2).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity)getActivity()).toGame(1);
+                    if (activity != null) {
+                        activity.toGame(1);
+                    }
                 }
             });
-            imageViewLevel3.setOnClickListener(new View.OnClickListener() {
+            view.findViewById(R.id.imageViewSelectLevel3).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity)getActivity()).toGame(2);
+                    if (activity != null) {
+                        activity.toGame(2);
+                    }
                 }
             });
-            imageViewLevel4.setOnClickListener(new View.OnClickListener() {
+            view.findViewById(R.id.imageViewSelectLevel4).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity)getActivity()).toGame(3);
+                    if (activity != null) {
+                        activity.toGame(3);
+                    }
                 }
             });
 
@@ -115,16 +114,18 @@ public class MainActivity extends FragmentActivity {
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
+            this.activity = (MainActivity) activity;
         }
 
         @Override
         public void onDetach() {
             super.onDetach();
+            this.activity = null;
         }
     }
 
 
-    public static class GameFragment extends Fragment  implements View.OnDragListener{
+    public static class GameFragment extends Fragment implements View.OnDragListener {
 
         private String TAG = "DRAG";
 
@@ -139,7 +140,7 @@ public class MainActivity extends FragmentActivity {
 
         private int level = 0;
         public static int MAX_NUMBER = 6;
-        private static int[] delays = {5, 7, 10, 600};
+        private static int[] delays = {10, 20, 30, 45};
 
         private Timer akTimer;
 
@@ -165,12 +166,12 @@ public class MainActivity extends FragmentActivity {
                 @Override
                 public void run() {
                     timerText.setText(currentTick + "");
-                    if (currentNumber==MAX_NUMBER){
+                    if (currentNumber == MAX_NUMBER) {
                         currentTick = 0;
                         akTimer.cancel();
                         showWin();
-                    }else{
-                        if(currentTick <= 0) {
+                    } else {
+                        if (currentTick <= 0) {
                             akTimer.cancel();
                             showFail();
                         }
@@ -197,7 +198,7 @@ public class MainActivity extends FragmentActivity {
             // On pressing Settings button
             alertDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    if (getActivity()!=null) {
+                    if (getActivity() != null) {
                         ((MainActivity) getActivity()).toLevelChoise();
                     }
 
@@ -209,7 +210,7 @@ public class MainActivity extends FragmentActivity {
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     dialog.dismiss();
-                    if(getActivity() != null) {
+                    if (getActivity() != null) {
                         ((MainActivity) getActivity()).toLevelChoise();
                     }
                 }
@@ -226,14 +227,13 @@ public class MainActivity extends FragmentActivity {
         }
 
 
-
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.game_layout, container, false);
 
             handler = new Handler();
             timerText = (TextView) rootView.findViewById(R.id.timerText);
-            ak = (ImageView)rootView.findViewById(R.id.ak);
+            ak = (ImageView) rootView.findViewById(R.id.ak);
             table = (TableLayout) rootView.findViewById(R.id.table);
 
             rootView.findViewById(R.id.ak).setOnDragListener(this);
