@@ -127,8 +127,6 @@ public class MainActivity extends FragmentActivity {
 
     public static class GameFragment extends Fragment implements View.OnDragListener {
 
-        private String TAG = "DRAG";
-
         private Handler handler;
         private TextView timerText;
         //TODO check if volatile is enough
@@ -144,7 +142,7 @@ public class MainActivity extends FragmentActivity {
 
         private Timer akTimer;
 
-        final MediaPlayer mp = new MediaPlayer();
+        MediaPlayer mp;
 
         public GameFragment() {
             super();
@@ -182,18 +180,18 @@ public class MainActivity extends FragmentActivity {
         }
 
         public void showWin() {
-            showAlert(getString(R.string.winTitle), getString(R.string.winMessage), R.drawable.win);
+            showAlert(getString(R.string.winTitle), getString(R.string.winMessage));//, R.drawable.win);
         }
 
         public void showFail() {
-            showAlert(getString(R.string.failTitle), getString(R.string.failMessage), R.drawable.fail);
+            showAlert(getString(R.string.failTitle), getString(R.string.failMessage));//, R.drawable.fail);
         }
 
-        private void showAlert(String title, String message, int drawable) {
+        private void showAlert(String title, String message){//, int drawable) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
             alertDialog.setTitle(title);
             alertDialog.setMessage(message);
-            alertDialog.setIcon(drawable);
+            //alertDialog.setIcon(drawable);
 
             // On pressing Settings button
             alertDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -240,10 +238,12 @@ public class MainActivity extends FragmentActivity {
             AssetFileDescriptor afd;
             try {
                 afd = getActivity().getAssets().openFd("reload2.mp3");
+                mp = new MediaPlayer();
                 mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
                 mp.prepare();
+                afd.close();
             } catch (IOException e1) {
-                Log.e("", e1.getMessage(), e1);
+                Log.e("play", e1.getMessage(), e1);
             }
 
             mix();
@@ -262,18 +262,13 @@ public class MainActivity extends FragmentActivity {
             switch (dragEvent.getAction()) {
 
                 case DragEvent.ACTION_DRAG_STARTED:
-                    Log.i(TAG, "drag action started");
 
                     // Determines if this View can accept the dragged data
                     if (dragEvent.getClipDescription()
                             .hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                        Log.i(TAG, "Can accept this data");
 
                         // returns true to indicate that the View can accept the dragged data.
                         return true;
-
-                    } else {
-                        Log.i(TAG, "Can not accept this data");
 
                     }
 
@@ -282,18 +277,15 @@ public class MainActivity extends FragmentActivity {
                     return false;
 
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    Log.i(TAG, "drag action entered");
 //                the drag point has entered the bounding box
                     return true;
 
                 case DragEvent.ACTION_DRAG_LOCATION:
-                    Log.i(TAG, "drag action location");
                 /*triggered after ACTION_DRAG_ENTERED
                 stops after ACTION_DRAG_EXITED*/
                     return true;
 
                 case DragEvent.ACTION_DRAG_EXITED:
-                    Log.i(TAG, "drag action exited");
 //                the drag shadow has left the bounding box
                     return true;
 
@@ -307,11 +299,9 @@ public class MainActivity extends FragmentActivity {
                         PartEnum part = PartEnum.getPartByTag(tag);
                         if (part != null) {
                             if (part.getOrder() == currentNumber) {
-                                Log.i(TAG, "part = " + part.getTag() + " currentNumber = " + currentNumber);
                                 currentNumber++;
                                 mp.start();
                                 ak.setImageResource(part.getAkWithThisPartResource());
-                                Log.i(TAG, "dropping " + draggedImageView.getTag());
                                 draggedImageView.setVisibility(View.INVISIBLE);
                                 return true;
                             }
@@ -321,13 +311,9 @@ public class MainActivity extends FragmentActivity {
 
                 case DragEvent.ACTION_DRAG_ENDED:
 
-                    Log.i(TAG, "drag action ended");
-                    Log.i(TAG, "getResult: " + dragEvent.getResult());
-
 
 //                if the drop was not successful, set the ball to visible
                     if (!dragEvent.getResult()) {
-                        Log.i(TAG, "setting visible");
                         draggedImageView.setVisibility(View.VISIBLE);
                         return true;
                     }
@@ -335,7 +321,6 @@ public class MainActivity extends FragmentActivity {
                     return false;
                 // An unknown action type was received.
                 default:
-                    Log.i(TAG, "Unknown action type received by OnDragListener.");
                     break;
             }
             return false;
@@ -365,7 +350,6 @@ public class MainActivity extends FragmentActivity {
                                             v.setVisibility(View.VISIBLE);
                                             return false;
                                         case (MotionEvent.ACTION_MOVE):
-                                            Log.d(TAG, "onTouch");
                                             try {
                                                 ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
 
@@ -448,8 +432,8 @@ public class MainActivity extends FragmentActivity {
             // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
             AdRequest adRequest = new AdRequest.Builder()
                     //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice("173BD073D90BF3D4470C5BF99574C283")
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    //.addTestDevice("173BD073D90BF3D4470C5BF99574C283")
+                    //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                     .build();
 
             // Start loading the ad in the background.

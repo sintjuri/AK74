@@ -2,17 +2,16 @@
 <resources>
 
     <string name="app_name">Assembly Kalashnikov</string>
-    <string name="spirit">Spirit</string>
-    <string name="elephant">Elephant</string>
-    <string name="scoop">Scoop</string>
-    <string name="grandfather">Grandfather</string>
+    <string name="spirit">Dukh</string>
+    <string name="elephant">Slon</string>
+    <string name="scoop">Polovnik</string>
+    <string name="grandfather">Ded</string>
 
-    <string name="banner_ad_unit_id">ca-app-pub-6347267324496509/8888525279</string>
     <string name="ok">Ok</string>
-    <string name="winTitle">Yoa are win</string>
+    <string name="winTitle">You won</string>
     <string name="winMessage">Congrats, you are a good soldier</string>
-    <string name="failTitle">You are looser</string>
-    <string name="failMessage">Continue to learn</string>
-    <string name="please_select_level">Please select your level</string>
+    <string name="failTitle">You loose</string>
+    <string name="failMessage">Continue learning</string>
+    <string name="please_select_level">Select level</string>
 
 </resources>

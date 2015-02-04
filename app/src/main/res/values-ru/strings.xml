@@ -11,7 +11,7 @@
     <string name="winMessage">Представлен к награде!</string>
     <string name="failTitle">Время вышло</string>
     <string name="failMessage">Солдат, ты не выполнил норматив!</string>
-    <string name="please_select_level">Выбери свое звание, солдат!</string>
+    <string name="please_select_level">Ты кто, солдат?</string>
 
 
 </resources>
