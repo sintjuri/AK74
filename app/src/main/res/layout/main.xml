@@ -1,17 +1,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    tools:ignore="MergeRootFrame" >
+    android:layout_height="match_parent">
 
-    <fragment android:name="com.onettm.ak74.MainActivity$PlaceholderFragment"
+    <FrameLayout
         android:id="@+id/placeholderFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/adFragment"
-        tools:layout="@layout/fragment_my" />
+        android:layout_height="match_parent"
+        android:layout_above="@+id/adFragment">
+
+        <fragment
+            android:id="@+id/gameFragment"
+            android:name="com.onettm.ak74.MainActivity$LevelChoiceFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
     <fragment
         android:id="@+id/adFragment"
         android:name="com.onettm.ak74.MainActivity$AdFragment"

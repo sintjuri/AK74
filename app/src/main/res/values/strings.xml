@@ -8,21 +8,11 @@
     <string name="grandfather">Grandfather</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-6347267324496509/8888525279</string>
-    <string name="select_level">Please select level</string>
     <string name="ok">Ok</string>
     <string name="winTitle">Yoa are win</string>
     <string name="winMessage">Congrats, you are a good soldier</string>
     <string name="failTitle">You are looser</string>
     <string name="failMessage">Continue to learn</string>
-    <string name="level_1_image">level 1 image</string>
-    <string name="level_2_image">level 2 image</string>
-    <string name="level_3_image">level 3 image</string>
-    <string name="level_5_image">level 5 image</string>
-    <string name="level_4_image">level 4 image</string>
-    <string name="select_level_1">Select Level 1</string>
-    <string name="select_level_2">select level 2</string>
-    <string name="select_level_3">Select level 3</string>
-    <string name="select_level_4">Select level 4</string>
-    <string name="select_level_5">Select level 5</string>
+    <string name="please_select_level">Please select your level</string>
 
 </resources>

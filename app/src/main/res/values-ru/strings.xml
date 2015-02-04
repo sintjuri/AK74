@@ -6,12 +6,12 @@
     <string name="elephant">Слон</string>
     <string name="scoop">Черпак</string>
     <string name="grandfather">Дед</string>
-    <string name="select_level">Выберите уровень сложности</string>
     <string name="ok">Да</string>
-    <string name="winTitle">Yoa are win</string>
-    <string name="winMessage">Congrats, you are a goog soldier</string>
-    <string name="failTitle">You are looser</string>
-    <string name="failMessage">Continue to learn</string>
+    <string name="winTitle">Поздравляю</string>
+    <string name="winMessage">Представлен к награде!</string>
+    <string name="failTitle">Время вышло</string>
+    <string name="failMessage">Солдат, ты не выполнил норматив!</string>
+    <string name="please_select_level">Выбери свое звание, солдат!</string>
 
 
 </resources>

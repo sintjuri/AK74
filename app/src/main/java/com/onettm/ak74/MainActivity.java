@@ -3,7 +3,6 @@ package com.onettm.ak74;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -12,6 +11,7 @@ import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -31,26 +31,7 @@ import java.util.Collections;
 import java.util.Stack;
 import java.util.Timer;
 
-public class MainActivity extends Activity implements LevelChoiceDialog.Callbacks {
-
-    private int level = 0;
-    public static int MAX_NUMBER = 6;
-    private static int[] delays = {5, 7, 10, 25, 600};
-    private int lastTick;
-    private Timer akTimer;
-
-    public Integer getCurrentNumber() {
-        PlaceholderFragment fragment = (PlaceholderFragment) getFragmentManager().findFragmentById(R.id.placeholderFragment);
-        return fragment.getCurrentNumber();
-    }
-
-    public int getLastTick() {
-        return lastTick;
-    }
-
-    public void setLastTick(int lastTick) {
-        this.lastTick = lastTick;
-    }
+public class MainActivity extends FragmentActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,121 +39,202 @@ public class MainActivity extends Activity implements LevelChoiceDialog.Callback
         setContentView(R.layout.main);
     }
 
-    @Override
-    public void onItemSelected(int level) {
-        this.level = level;
-        PlaceholderFragment fragment = (PlaceholderFragment) getFragmentManager().findFragmentById(R.id.placeholderFragment);
-        fragment.mix();
-        startTimer();
+
+
+    public void toGame(int level){
+        // Create a new Fragment to be placed in the activity layout
+        GameFragment gameFragment = new GameFragment();
+        gameFragment.setLevel(level);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.placeholderFragment, gameFragment);
+        // Commit the transaction
+        transaction.commit();
     }
 
-    private void startTimer() {
-        PlaceholderFragment fragment = (PlaceholderFragment) getFragmentManager().findFragmentById(R.id.placeholderFragment);
-        akTimer = new Timer();
-        if (lastTick <= 0) {
-            lastTick = delays[level];
+    public void toLevelChoise(){
+        // Create a new Fragment to be placed in the activity layout
+        LevelChoiceFragment levelChoiceFragment = new LevelChoiceFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.placeholderFragment, levelChoiceFragment);
+        // Commit the transaction
+        transaction.commit();
+    }
+
+
+    public static class LevelChoiceFragment extends Fragment {
+        View view;
+        ImageView imageViewLevel1;
+        ImageView imageViewLevel2;
+        ImageView imageViewLevel3;
+        ImageView imageViewLevel4;
+
+
+        @Override
+        public void onStart() {
+            super.onStart();
         }
-        akTimer.schedule(new AKTimerTask(this, fragment), 0, 1000);
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (akTimer != null) {
-            akTimer.cancel();
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            // Inflate the layout for this fragment
+            view = inflater.inflate(R.layout.level_choose_layout, container, false);
+            imageViewLevel1 = (ImageView) view.findViewById(R.id.imageViewSelectLevel1);
+            imageViewLevel2 = (ImageView) view.findViewById(R.id.imageViewSelectLevel2);
+            imageViewLevel3 = (ImageView) view.findViewById(R.id.imageViewSelectLevel3);
+            imageViewLevel4 = (ImageView) view.findViewById(R.id.imageViewSelectLevel4);
+
+            imageViewLevel1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity)getActivity()).toGame(0);
+                }
+            });
+            imageViewLevel2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity)getActivity()).toGame(1);
+                }
+            });
+            imageViewLevel3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity)getActivity()).toGame(2);
+                }
+            });
+            imageViewLevel4.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity)getActivity()).toGame(3);
+                }
+            });
+
+            return view;
+        }
+
+        @Override
+        public void onAttach(Activity activity) {
+            super.onAttach(activity);
+        }
+
+        @Override
+        public void onDetach() {
+            super.onDetach();
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if ((akTimer != null) && (lastTick > 0)) {
+
+    public static class GameFragment extends Fragment  implements View.OnDragListener{
+
+        private String TAG = "DRAG";
+
+        private Handler handler;
+        private TextView timerText;
+        //TODO check if volatile is enough
+        private volatile int currentNumber;
+        private ImageView ak;
+        private TableLayout table;
+        //TODO check if volatile is enough
+        private volatile int currentTick;
+
+        private int level = 0;
+        public static int MAX_NUMBER = 6;
+        private static int[] delays = {5, 7, 10, 600};
+
+        private Timer akTimer;
+
+        final MediaPlayer mp = new MediaPlayer();
+
+        public GameFragment() {
+            super();
+        }
+
+        private void startTimer() {
+            akTimer = new Timer();
+            if (currentTick <= 0) {
+                currentTick = delays[level];
+            }
+            akTimer.schedule(new AKTimerTask(this), 0, 1000);
+        }
+
+        public void incrementTick() {
+
+            currentTick--;
+
+            getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    timerText.setText(currentTick + "");
+                    if (currentNumber==MAX_NUMBER){
+                        currentTick = 0;
+                        akTimer.cancel();
+                        showWin();
+                    }else{
+                        if(currentTick <= 0) {
+                            akTimer.cancel();
+                            showFail();
+                        }
+                    }
+                }
+            });
+
+        }
+
+        public void showWin() {
+            showAlert(getString(R.string.winTitle), getString(R.string.winMessage), R.drawable.win);
+        }
+
+        public void showFail() {
+            showAlert(getString(R.string.failTitle), getString(R.string.failMessage), R.drawable.fail);
+        }
+
+        private void showAlert(String title, String message, int drawable) {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+            alertDialog.setTitle(title);
+            alertDialog.setMessage(message);
+            alertDialog.setIcon(drawable);
+
+            // On pressing Settings button
+            alertDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    if (getActivity()!=null) {
+                        ((MainActivity) getActivity()).toLevelChoise();
+                    }else{
+                        dialog.dismiss();
+                    }
+
+                }
+            });
+
+            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    dialog.dismiss();
+                    ((MainActivity)getActivity()).toLevelChoise();
+                }
+            });
+
+            // Showing Alert Message
+            alertDialog.show();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
             startTimer();
         }
 
 
-    }
-
-    private void showAlert(String title, String message, int drawable) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(message);
-        alertDialog.setIcon(drawable);
-
-        // On pressing Settings button
-        alertDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-
-                Fragment fragment = getFragmentManager().findFragmentById(R.id.placeholderFragment);
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                if (fragment != null)
-                    transaction.remove(fragment);
-
-                // Create new fragment and transaction
-                PlaceholderFragment newFragment = new PlaceholderFragment();
-
-
-                // Replace whatever is in the fragment_container view with this fragment,
-                // and add the transaction to the back stack
-                //transaction.replace(R.id.placeholderFragment, newFragment);
-                transaction.add(R.id.placeholderFragment, newFragment);
-
-                // Commit the transaction
-                transaction.commit();
-
-            }
-        });
-
-        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                dialog.dismiss();
-                openDialog();
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
-    }
-
-    protected void openDialog() {
-        LevelChoiceDialog lvlDialog = new LevelChoiceDialog();
-        FragmentManager fm = getFragmentManager();
-        final Fragment selectLevelLayout = getFragmentManager().findFragmentByTag("selectLevelLayout");
-
-        lvlDialog.show(fm, "selectLevelLayout");
-    }
-
-    public void showWin() {
-        showAlert(getString(R.string.winTitle), getString(R.string.winMessage), R.drawable.win);
-    }
-
-    public void showFail() {
-        showAlert(getString(R.string.failTitle), getString(R.string.failMessage), R.drawable.fail);
-    }
-
-    public static class PlaceholderFragment extends Fragment implements View.OnDragListener {
-
-        private String TAG = "DRAG";
-
-        private View rootView;
-        private Handler handler;
-        private TextView timerText;
-        private Integer currentNumber;
-        final MediaPlayer mp = new MediaPlayer();
-
-        public PlaceholderFragment() {
-
-        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            rootView = inflater.inflate(R.layout.fragment_my, container, false);
-            ((MainActivity) getActivity()).openDialog();
+            View rootView = inflater.inflate(R.layout.game_layout, container, false);
 
             handler = new Handler();
             timerText = (TextView) rootView.findViewById(R.id.timerText);
+            ak = (ImageView)rootView.findViewById(R.id.ak);
+            table = (TableLayout) rootView.findViewById(R.id.table);
 
             rootView.findViewById(R.id.ak).setOnDragListener(this);
             AssetFileDescriptor afd;
@@ -184,15 +246,12 @@ public class MainActivity extends Activity implements LevelChoiceDialog.Callback
                 Log.e("", e1.getMessage(), e1);
             }
 
+            mix();
             return rootView;
         }
 
         public Handler getHandler() {
             return handler;
-        }
-
-        public TextView getTextView() {
-            return timerText;
         }
 
         @Override
@@ -251,7 +310,7 @@ public class MainActivity extends Activity implements LevelChoiceDialog.Callback
                                 Log.i(TAG, "part = " + part.getTag() + " currentNumber = " + currentNumber);
                                 currentNumber++;
                                 mp.start();
-                                ((ImageView) rootView.findViewById(R.id.ak)).setImageResource(part.getAkWithThisPartResource());
+                                ak.setImageResource(part.getAkWithThisPartResource());
                                 Log.i(TAG, "dropping " + draggedImageView.getTag());
                                 draggedImageView.setVisibility(View.INVISIBLE);
                                 return true;
@@ -284,7 +343,7 @@ public class MainActivity extends Activity implements LevelChoiceDialog.Callback
 
         public void mix() {
 
-            TableLayout table = (TableLayout) rootView.findViewById(R.id.table);
+
             Stack<PartEnum> parts = createRandomList();
 
             for (int i = 0; i < table.getChildCount(); i++) {
@@ -344,7 +403,6 @@ public class MainActivity extends Activity implements LevelChoiceDialog.Callback
         }
 
         private Stack<PartEnum> createRandomList() {
-            //TODO add real implementation
             Stack<PartEnum> result = new Stack<PartEnum>();
             for (PartEnum value : PartEnum.values()) {
                 result.push(value);
@@ -353,8 +411,17 @@ public class MainActivity extends Activity implements LevelChoiceDialog.Callback
             return result;
         }
 
-        public Integer getCurrentNumber() {
-            return currentNumber;
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            if (akTimer != null) {
+                akTimer.cancel();
+            }
+        }
+
+        public void setLevel(int level) {
+            this.level = level;
         }
     }
 
