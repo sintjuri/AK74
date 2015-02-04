@@ -199,8 +199,6 @@ public class MainActivity extends FragmentActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     if (getActivity()!=null) {
                         ((MainActivity) getActivity()).toLevelChoise();
-                    }else{
-                        dialog.dismiss();
                     }
 
                 }
@@ -211,7 +209,9 @@ public class MainActivity extends FragmentActivity {
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     dialog.dismiss();
-                    ((MainActivity)getActivity()).toLevelChoise();
+                    if(getActivity() != null) {
+                        ((MainActivity) getActivity()).toLevelChoise();
+                    }
                 }
             });
 
