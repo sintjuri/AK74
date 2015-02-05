@@ -8,8 +8,8 @@ android {
         applicationId "com.onettm.ak74"
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 1
-        versionName "first.0"
+        versionCode 3
+        versionName "third"
     }
     buildTypes {
         release {
